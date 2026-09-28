@@ -4,6 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { HelpCircle, Trophy, Sparkles, AlertCircle, RotateCcw, CheckCircle2, Award, Zap, Shuffle, Volume2 } from 'lucide-react';
 import { sound } from '@/lib/sound';
 import { getHighScore, saveHighScore } from '@/lib/gameStore';
+import { awardAuraWin } from '@/lib/auraStore';
 
 interface WordItem {
   word: string;
@@ -509,10 +510,12 @@ export function SoletrandoGame() {
         setGameState('MILLIONAIRE');
         setSilvioSpeech('PARABÉNS! VOCÊ ACABOU DE GANHAR 1 MILHÃO DE BARRAS DE OURO QUE VALEM MAIS DO QUE DINHEIRO!');
         speakHost('Parabéns! Você ganhou um milhão de barras de ouro que valem mais do que dinheiro!');
+        awardAuraWin('Show do Soletrando');
       } else {
         setGameState('CORRECT');
         setSilvioSpeech('Ha-hai! Ceeerta resposta! O auditório vai ao delírio!');
         speakHost('Certa resposta! Vamos para o próximo tema!');
+        awardAuraWin('Show do Soletrando');
       }
     } else {
       // WRONG ANSWER!

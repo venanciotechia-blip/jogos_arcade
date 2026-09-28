@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Play, Pause, RotateCcw, Trophy, Sparkles, Volume2, VolumeX } from 'lucide-react';
 import { sound } from '@/lib/sound';
 import { getHighScore, saveHighScore } from '@/lib/gameStore';
+import { awardAuraWin, triggerDefeat } from '@/lib/auraStore';
 import { VirtualController } from '../VirtualController';
 
 type Direction = 'UP' | 'DOWN' | 'LEFT' | 'RIGHT';
@@ -258,6 +259,11 @@ export function SnakeGame() {
       if (isNew) {
         setIsNewRecord(true);
         setHighScore(score);
+      }
+      if (score >= 30) {
+        awardAuraWin('Cobrinha Clássica');
+      } else {
+        triggerDefeat('Cobrinha Clássica');
       }
     };
 

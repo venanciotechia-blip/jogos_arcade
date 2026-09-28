@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Play, Pause, RotateCcw, Trophy, Heart, Crosshair } from 'lucide-react';
 import { sound } from '@/lib/sound';
 import { getHighScore, saveHighScore } from '@/lib/gameStore';
+import { awardAuraWin, triggerDefeat } from '@/lib/auraStore';
 import { VirtualController } from '../VirtualController';
 
 interface Invader {
@@ -212,6 +213,7 @@ export function SpaceInvadersGame() {
               if (inv.y >= CANVAS_HEIGHT - 80) {
                 sound.playGameOver();
                 setGameState('GAMEOVER');
+                triggerDefeat('Invasores Espaciais');
                 setScore((s) => {
                   saveHighScore('invaders', s);
                   return s;
@@ -335,6 +337,7 @@ export function SpaceInvadersGame() {
                 if (nextLives <= 0) {
                   sound.playGameOver();
                   setGameState('GAMEOVER');
+                  triggerDefeat('Invasores Espaciais');
                   setScore((s) => {
                     saveHighScore('invaders', s);
                     return s;
@@ -355,6 +358,7 @@ export function SpaceInvadersGame() {
         // Check if wave is cleared
         if (aliveInvaders.length === 0) {
           sound.playClear();
+          awardAuraWin('Invasores Espaciais');
           setWave((w) => {
             const nextW = w + 1;
             initWave(nextW);

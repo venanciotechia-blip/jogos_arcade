@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Play, Pause, RotateCcw, Trophy, Heart, Sparkles, Flame } from 'lucide-react';
 import { sound } from '@/lib/sound';
 import { getHighScore, saveHighScore } from '@/lib/gameStore';
+import { awardAuraWin, triggerDefeat } from '@/lib/auraStore';
 import { VirtualController } from '../VirtualController';
 
 interface Ladder {
@@ -496,6 +497,7 @@ export function DonkeyKongGame() {
           return n;
         });
         setGameState('VICTORY');
+        awardAuraWin('Gorila Barris (Kong)');
       }
 
       // Update Floating texts

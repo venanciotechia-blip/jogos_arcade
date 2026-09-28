@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Play, Pause, RotateCcw, Trophy, Heart, Sparkles } from 'lucide-react';
 import { sound } from '@/lib/sound';
 import { getHighScore, saveHighScore } from '@/lib/gameStore';
+import { awardAuraWin, triggerDefeat } from '@/lib/auraStore';
 import { VirtualController } from '../VirtualController';
 
 interface Brick {
@@ -311,6 +312,7 @@ export function BreakoutGame() {
             if (nextL <= 0) {
               sound.playGameOver();
               setGameState('GAMEOVER');
+              triggerDefeat('Quebra-Blocos');
             } else {
               spawnInitialBall();
             }
@@ -370,6 +372,7 @@ export function BreakoutGame() {
         if (aliveBricks.length === 0) {
           sound.playClear();
           setGameState('VICTORY');
+          awardAuraWin('Quebra-Blocos');
         }
       }
 

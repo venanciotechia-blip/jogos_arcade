@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Play, Pause, RotateCcw, Trophy, Users, User } from 'lucide-react';
 import { sound } from '@/lib/sound';
 import { getHighScore, saveHighScore } from '@/lib/gameStore';
+import { awardAuraWin, triggerDefeat } from '@/lib/auraStore';
 
 type GameMode = '1P_EASY' | '1P_NORMAL' | '1P_HARD' | '2P_LOCAL';
 
@@ -213,6 +214,9 @@ export function PongGame() {
             if (next >= WINNING_SCORE) {
               setWinner(mode === '2P_LOCAL' ? 'Jogador 2' : 'Computador');
               setGameState('GAMEOVER');
+              if (mode !== '2P_LOCAL') {
+                triggerDefeat('Tênis Retrô (Pong)');
+              }
             } else {
               resetBall(true);
             }
@@ -226,6 +230,8 @@ export function PongGame() {
             if (next >= WINNING_SCORE) {
               setWinner(mode === '2P_LOCAL' ? 'Jogador 1' : 'Você');
               setGameState('GAMEOVER');
+              const auraDiff = mode === '1P_HARD' ? 'DIFICIL' : mode === '1P_EASY' ? 'FACIL' : 'MEDIO';
+              awardAuraWin('Tênis Retrô (Pong)', auraDiff);
             } else {
               resetBall(false);
             }

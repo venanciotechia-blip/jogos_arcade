@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Flag, Bomb, RotateCcw, Clock, Sparkles } from 'lucide-react';
 import { sound } from '@/lib/sound';
 import { getHighScore, saveHighScore } from '@/lib/gameStore';
+import { awardAuraWin, triggerDefeat } from '@/lib/auraStore';
 
 type Difficulty = 'EASY' | 'MEDIUM' | 'HARD';
 
@@ -156,6 +157,7 @@ export function MinesweeperGame() {
       sound.playExplosion();
       setGameState('LOST');
       setFaceState('DEAD');
+      triggerDefeat('Campo Minado');
 
       // Reveal all mines
       for (let i = 0; i < rows; i++) {
@@ -210,6 +212,8 @@ export function MinesweeperGame() {
       setFaceState('COOL');
       const scoreCalc = Math.max(10, 1000 - timer * 2);
       saveHighScore('minesweeper', scoreCalc);
+      const auraDiff = difficulty === 'HARD' ? 'DIFICIL' : difficulty === 'EASY' ? 'FACIL' : 'MEDIO';
+      awardAuraWin('Campo Minado', auraDiff);
     }
 
     setGrid(newGrid);

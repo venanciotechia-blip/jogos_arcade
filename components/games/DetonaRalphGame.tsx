@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Play, RotateCcw, Trophy, Award, Zap, ArrowLeft, ArrowRight, ArrowUp, ArrowDown } from 'lucide-react';
 import { sound } from '@/lib/sound';
 import { getHighScore, saveHighScore } from '@/lib/gameStore';
+import { awardAuraWin, triggerDefeat } from '@/lib/auraStore';
 
 // Dimensions
 const CANVAS_WIDTH = 480;
@@ -260,6 +261,7 @@ export function DetonaRalphGame() {
         setStatusMessage('TODAS AS JANELAS CONSERTADAS! VOCÊ VENCEU!');
         ralphRef.current.state = 'MAD';
         ralphRef.current.stateTimer = 9999;
+        awardAuraWin('Detona Ralph');
       }
     }
   }, [gameState]);
@@ -333,6 +335,7 @@ export function DetonaRalphGame() {
         sound.playGameOver();
         setGameState('GAMEOVER');
         setStatusMessage('RALPH DETONOU TUDO! FIM DE JOGO!');
+        triggerDefeat('Detona Ralph');
       } else {
         setStatusMessage(`CUIDADO! VOCÊ FOI ATINGIDO! VIDAS: ${nextLives}`);
       }

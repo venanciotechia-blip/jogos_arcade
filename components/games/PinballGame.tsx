@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Play, RotateCcw, Trophy, Zap, Menu } from 'lucide-react';
 import { sound } from '@/lib/sound';
 import { getHighScore, saveHighScore } from '@/lib/gameStore';
+import { awardAuraWin } from '@/lib/auraStore';
 
 interface Ball {
   id: number;
@@ -234,6 +235,7 @@ export function PinballGame() {
               color: '#38bdf8',
               alpha: 1,
             });
+            awardAuraWin('Pinball Galáctico');
 
             // Activate Multiball on 3rd mission
             if (currIdx === 2 && !multiballActiveRef.current) {

@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Play, Pause, RotateCcw, Trophy, Layers, ArrowDownToLine } from 'lucide-react';
 import { sound } from '@/lib/sound';
 import { getHighScore, saveHighScore } from '@/lib/gameStore';
+import { awardAuraWin } from '@/lib/auraStore';
 import { VirtualController } from '../VirtualController';
 
 const COLS = 10;
@@ -245,6 +246,9 @@ export function TetrisGame() {
       setLines((prev) => {
         const totalLines = prev + cleared;
         const newLevel = Math.floor(totalLines / 10) + 1;
+        if (newLevel > level || cleared >= 4) {
+          awardAuraWin('Tetris Retrô');
+        }
         setLevel(newLevel);
         return totalLines;
       });

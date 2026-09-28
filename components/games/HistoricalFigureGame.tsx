@@ -8,6 +8,7 @@ import {
 } from '@/lib/historicalFigures';
 import { sound } from '@/lib/sound';
 import { saveHighScore, getHighScore } from '@/lib/gameStore';
+import { awardAuraWin } from '@/lib/auraStore';
 import {
   HelpCircle,
   Send,
@@ -101,6 +102,7 @@ export function HistoricalFigureGame() {
     const newHigh = Math.max(highScore, finalScore);
     saveHighScore('figura_historica', newHigh);
     setHighScore(newHigh);
+    awardAuraWin('Enigma Histórico');
   }, [score, revealedHints.length, highScore]);
 
   // Submit question or direct guess

@@ -968,6 +968,162 @@ class RetroSoundManager {
       osc.stop(now + 0.09);
     } catch {}
   }
+
+  public playAuraGain() {
+    if (this.isMuted) return;
+    try {
+      this.initContext();
+      if (!this.ctx) return;
+      const now = this.ctx.currentTime;
+      const freqs = [440, 554.37, 659.25, 880, 1108.73];
+      freqs.forEach((freq, idx) => {
+        if (!this.ctx) return;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, now + idx * 0.04);
+        gain.gain.setValueAtTime(0.08, now + idx * 0.04);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.04 + 0.2);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now + idx * 0.04);
+        osc.stop(now + idx * 0.04 + 0.22);
+      });
+    } catch {}
+  }
+
+  public playStreetFighterKO() {
+    if (this.isMuted) return;
+    try {
+      this.initContext();
+      if (!this.ctx) return;
+      const now = this.ctx.currentTime;
+
+      // 1. Massive Sub-Bass Boom
+      const bassOsc = this.ctx.createOscillator();
+      const bassGain = this.ctx.createGain();
+      bassOsc.type = 'sine';
+      bassOsc.frequency.setValueAtTime(120, now);
+      bassOsc.frequency.exponentialRampToValueAtTime(28, now + 0.5);
+      bassGain.gain.setValueAtTime(0.35, now);
+      bassGain.gain.exponentialRampToValueAtTime(0.001, now + 0.7);
+      bassOsc.connect(bassGain);
+      bassGain.connect(this.ctx.destination);
+      bassOsc.start(now);
+      bassOsc.stop(now + 0.7);
+
+      // 2. White noise impact explosion
+      const bufferSize = this.ctx.sampleRate * 0.3;
+      const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+      const output = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        output[i] = Math.random() * 2 - 1;
+      }
+      const noise = this.ctx.createBufferSource();
+      noise.buffer = buffer;
+      const noiseFilter = this.ctx.createBiquadFilter();
+      noiseFilter.type = 'lowpass';
+      noiseFilter.frequency.setValueAtTime(800, now);
+      noiseFilter.frequency.exponentialRampToValueAtTime(80, now + 0.3);
+      const noiseGain = this.ctx.createGain();
+      noiseGain.gain.setValueAtTime(0.3, now);
+      noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+      noise.connect(noiseFilter);
+      noiseFilter.connect(noiseGain);
+      noiseGain.connect(this.ctx.destination);
+      noise.start(now);
+
+      // 3. Street Fighter Victory Brass Fanfare (Power Chord: C4, G4, C5, E5)
+      const chord = [261.63, 392.0, 523.25, 659.25];
+      chord.forEach((freq, idx) => {
+        if (!this.ctx) return;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(freq, now + 0.08);
+        osc.frequency.exponentialRampToValueAtTime(freq * 1.01, now + 0.8);
+        gain.gain.setValueAtTime(0.12, now + 0.08);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.95 + idx * 0.03);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now + 0.08);
+        osc.stop(now + 1.0);
+      });
+
+      // 4. Shimmering gong / bell chime
+      const gongOsc = this.ctx.createOscillator();
+      const gongGain = this.ctx.createGain();
+      gongOsc.type = 'triangle';
+      gongOsc.frequency.setValueAtTime(1046.5, now + 0.05); // C6
+      gongGain.gain.setValueAtTime(0.15, now + 0.05);
+      gongGain.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
+      gongOsc.connect(gongGain);
+      gongGain.connect(this.ctx.destination);
+      gongOsc.start(now + 0.05);
+      gongOsc.stop(now + 1.25);
+    } catch {}
+  }
+
+  public playStreetFighterDefeat() {
+    if (this.isMuted) return;
+    try {
+      this.initContext();
+      if (!this.ctx) return;
+      const now = this.ctx.currentTime;
+
+      // 1. Heavy slam impact bass
+      const bassOsc = this.ctx.createOscillator();
+      const bassGain = this.ctx.createGain();
+      bassOsc.type = 'sawtooth';
+      bassOsc.frequency.setValueAtTime(140, now);
+      bassOsc.frequency.exponentialRampToValueAtTime(30, now + 0.6);
+      bassGain.gain.setValueAtTime(0.35, now);
+      bassGain.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
+      bassOsc.connect(bassGain);
+      bassGain.connect(this.ctx.destination);
+      bassOsc.start(now);
+      bassOsc.stop(now + 0.6);
+
+      // 2. White noise punch crash
+      const bufferSize = this.ctx.sampleRate * 0.25;
+      const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+      const output = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        output[i] = Math.random() * 2 - 1;
+      }
+      const noise = this.ctx.createBufferSource();
+      noise.buffer = buffer;
+      const noiseFilter = this.ctx.createBiquadFilter();
+      noiseFilter.type = 'lowpass';
+      noiseFilter.frequency.setValueAtTime(600, now);
+      noiseFilter.frequency.exponentialRampToValueAtTime(60, now + 0.25);
+      const noiseGain = this.ctx.createGain();
+      noiseGain.gain.setValueAtTime(0.28, now);
+      noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+      noise.connect(noiseFilter);
+      noiseFilter.connect(noiseGain);
+      noiseGain.connect(this.ctx.destination);
+      noise.start(now);
+
+      // 3. Descending Minor Defeat Wail (Eb3 -> C3 -> Ab2)
+      const minorNotes = [155.56, 130.81, 103.83];
+      minorNotes.forEach((freq, idx) => {
+        if (!this.ctx) return;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'square';
+        const startT = now + 0.08 + idx * 0.18;
+        osc.frequency.setValueAtTime(freq, startT);
+        osc.frequency.exponentialRampToValueAtTime(freq * 0.88, startT + 0.22);
+        gain.gain.setValueAtTime(0.14, startT);
+        gain.gain.exponentialRampToValueAtTime(0.001, startT + 0.22);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(startT);
+        osc.stop(startT + 0.22);
+      });
+    } catch {}
+  }
 }
 
 export const sound = new RetroSoundManager();

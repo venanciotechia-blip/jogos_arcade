@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Play, RotateCcw, Trophy, Award, Zap, Volume2, Shield, Settings2, Sparkles, ChevronRight, Activity } from 'lucide-react';
 import { sound } from '@/lib/sound';
 import { getHighScore, saveHighScore } from '@/lib/gameStore';
+import { awardAuraWin, triggerDefeat } from '@/lib/auraStore';
 
 export type CourtSurface = 'concreto' | 'saibro' | 'grama';
 export type ShotType = 'flat' | 'topspin' | 'slice';
@@ -376,6 +377,7 @@ export function TennisGame() {
             const newScore = Math.max(highScore, 1000 + updated * 500);
             saveHighScore('tennis', newScore);
             setHighScore(newScore);
+            awardAuraWin('Grand Slam Tennis');
           } else {
             setAnnouncement(`GAME SEU! Placar: ${updated} - ${cpuGames}`);
           }
@@ -393,6 +395,7 @@ export function TennisGame() {
           if (updated >= matchLength) {
             setGameState('GAME_OVER');
             setAnnouncement('FIM DE JOGO! CPU CONQUISTOU O TORNEIO!');
+            triggerDefeat('Grand Slam Tennis');
           } else {
             setAnnouncement(`GAME CPU! Placar: ${playerGames} - ${updated}`);
           }

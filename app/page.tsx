@@ -3,6 +3,8 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { Navbar } from '@/components/Navbar';
+import { AuraBar } from '@/components/AuraBar';
+import { StreetFighterItsOver } from '@/components/StreetFighterItsOver';
 import { ArcadeCabinet } from '@/components/ArcadeCabinet';
 import { GameCard } from '@/components/GameCard';
 import { GAMES_CATALOG, GameInfo, GameId } from '@/lib/gameStore';
@@ -40,6 +42,9 @@ export default function Home() {
         crtEnabled={crtEnabled}
         onToggleCrt={() => setCrtEnabled((prev) => !prev)}
       />
+
+      {/* Aura Farmada XP Bar with Difficulty Selector */}
+      <AuraBar />
 
       <main className="flex-1">
         {/* Hero Section */}
@@ -290,6 +295,9 @@ export default function Home() {
           </div>
         </div>
       </footer>
+
+      {/* Street Fighter IT'S OVER "FARMOU DEMAIS SLK" Overlay */}
+      <StreetFighterItsOver />
     </div>
   );
 }

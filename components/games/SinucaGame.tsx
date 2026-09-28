@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Play, RotateCcw, Trophy, Users, Bot, User, ChevronLeft, ChevronRight, Zap, Target, Award } from 'lucide-react';
 import { sound } from '@/lib/sound';
 import { getHighScore, saveHighScore } from '@/lib/gameStore';
+import { awardAuraWin } from '@/lib/auraStore';
 
 export type GameMode = '2P' | 'VS_AI' | 'SOLO';
 export type BallGroup = 'ANY' | 'SOLIDS' | 'STRIPES'; // 1-7 Lisas vs 9-15 Listradas
@@ -387,8 +388,12 @@ export function SinucaGame() {
         setWinner(curName);
         setWinReason(`${curName} encaçapou a Bola 8 legalmente e venceu a partida!`);
         setGameState('GAMEOVER');
-        if (curP === 1) setP1Wins((w) => w + 1);
-        else setP2Wins((w) => w + 1);
+        if (curP === 1) {
+          setP1Wins((w) => w + 1);
+          awardAuraWin('Sinuca de Bar');
+        } else {
+          setP2Wins((w) => w + 1);
+        }
         return;
       } else {
         // Illegal 8-Ball pot (too early OR potted cue ball together) -> OPPONENT WINS!

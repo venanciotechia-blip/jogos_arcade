@@ -17,7 +17,8 @@ import { DetonaRalphGame } from './games/DetonaRalphGame';
 import { TennisGame } from './games/TennisGame';
 import { HistoricalFigureGame } from './games/HistoricalFigureGame';
 import { CRTOverlay } from './CRTOverlay';
-import { Sparkles, Gamepad2, Info, Keyboard, Smartphone } from 'lucide-react';
+import { Sparkles, Gamepad2, Info, Keyboard, Smartphone, Zap, Flame, Trophy, Swords, Skull } from 'lucide-react';
+import { useAura, DIFFICULTY_CONFIG, AuraDifficulty } from '@/lib/auraStore';
 
 interface ArcadeCabinetProps {
   game: GameInfo;
@@ -26,6 +27,8 @@ interface ArcadeCabinetProps {
 }
 
 export function ArcadeCabinet({ game, crtEnabled, onSelectGame }: ArcadeCabinetProps) {
+  const { totalAura, difficulty, changeDifficulty, awardWin, triggerDefeat } = useAura();
+
   const renderGame = () => {
     switch (game.id) {
       case 'figura_historica':
@@ -66,7 +69,7 @@ export function ArcadeCabinet({ game, crtEnabled, onSelectGame }: ArcadeCabinetP
       {/* Cabinet Frame Shell in Lilac */}
       <div className="relative w-full max-w-2xl bg-gradient-to-b from-[#311453] via-[#38175d] to-[#250d3f] p-4 sm:p-6 rounded-3xl border border-[#7e3bbd]/70 shadow-2xl shadow-purple-950/80">
         {/* Retro Cabinet Marquee */}
-        <div className="w-full mb-4 px-4 py-2.5 bg-[#1b0730]/90 rounded-xl border border-[#7e3bbd]/60 flex items-center justify-between">
+        <div className="w-full mb-3 px-4 py-2.5 bg-[#1b0730]/90 rounded-xl border border-[#7e3bbd]/60 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-2.5 h-2.5 rounded-full bg-[#00f5ff] animate-pulse shadow-sm shadow-[#00f5ff]" />
             <div>
@@ -81,6 +84,64 @@ export function ArcadeCabinet({ game, crtEnabled, onSelectGame }: ArcadeCabinetP
           <div className="flex items-center gap-2 text-xs font-mono text-[#00f5ff]">
             <Gamepad2 className="w-4 h-4 text-[#00f5ff]" />
             <span className="hidden sm:inline font-bold">ARCADE UNIT</span>
+          </div>
+        </div>
+
+        {/* Aura & Difficulty Bar in Cabinet */}
+        <div className="w-full mb-4 px-3.5 py-2 rounded-xl bg-[#220c3a]/90 border border-[#7e3bbd]/60 flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
+          <div className="flex items-center gap-2">
+            <span className="text-[11px] text-[#a5f3fc] flex items-center gap-1 font-bold">
+              <Zap className="w-3.5 h-3.5 text-[#00f5ff]" />
+              Dificuldade da Partida:
+            </span>
+            <div className="flex items-center gap-1">
+              {(['FACIL', 'MEDIO', 'DIFICIL'] as AuraDifficulty[]).map((d) => {
+                const isSelected = difficulty === d;
+                const cfg = DIFFICULTY_CONFIG[d];
+                return (
+                  <button
+                    key={d}
+                    type="button"
+                    onClick={() => changeDifficulty(d)}
+                    className={`px-2 py-0.5 rounded text-[10px] font-bold transition-all flex items-center gap-1 ${
+                      isSelected
+                        ? d === 'DIFICIL'
+                          ? 'bg-red-600 text-white shadow-sm shadow-red-600/50'
+                          : 'bg-[#00f5ff] text-[#1b0730] shadow-sm shadow-[#00f5ff]/40'
+                        : 'bg-[#18052b] text-[#a5f3fc] hover:text-[#00f5ff]'
+                    }`}
+                  >
+                    {d === 'DIFICIL' && <Flame className="w-2.5 h-2.5 fill-current" />}
+                    <span>{cfg.name}</span>
+                    <span className="opacity-80">({cfg.multiplierText.split(' ')[0]})</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="flex items-center gap-1.5 ml-auto">
+            {/* Quick Defeat Trigger */}
+            <button
+              type="button"
+              onClick={() => triggerDefeat(game.title)}
+              title="Testar tela de derrota 'ala o betinha kkkk'"
+              className="px-2 py-1 rounded-lg bg-red-950/80 hover:bg-red-900/90 text-rose-300 hover:text-white border border-red-500/50 text-[11px] font-bold flex items-center gap-1 shadow-sm active:scale-95 transition-all"
+            >
+              <Skull className="w-3 h-3 text-red-400" />
+              <span>Simular Derrota</span>
+            </button>
+
+            {/* Quick Victory Trigger */}
+            <button
+              type="button"
+              onClick={() => awardWin(game.title, difficulty)}
+              title="Registrar vitória neste jogo e farmar aura"
+              className="px-2.5 py-1 rounded-lg bg-gradient-to-r from-[#7e22ce] to-[#9333ea] hover:from-[#9333ea] hover:to-[#a855f7] text-[#00f5ff] border border-[#00f5ff]/40 text-[11px] font-bold flex items-center gap-1 shadow-sm active:scale-95 transition-all"
+            >
+              <Trophy className="w-3 h-3 text-yellow-300" />
+              <span>Farmar Vitória (+Aura)</span>
+            </button>
           </div>
         </div>
 

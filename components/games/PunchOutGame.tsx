@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Play, RotateCcw, Trophy, Award, Zap, Shield, ArrowLeft, ArrowRight, ArrowDown } from 'lucide-react';
 import { sound } from '@/lib/sound';
 import { getHighScore, saveHighScore } from '@/lib/gameStore';
+import { awardAuraWin, triggerDefeat } from '@/lib/auraStore';
 
 export interface OpponentConfig {
   id: string;
@@ -204,6 +205,7 @@ export function PunchOutGame() {
           sound.playBoxingBell();
           setGameState('VICTORY');
           setAnnouncement(`VITÓRIA POR T.K.O. CONTRA ${curOpponent.name}!`);
+          awardAuraWin('Super Punch-Out');
         }, 1500);
       } else {
         // Referee 10 Count
@@ -394,6 +396,7 @@ export function PunchOutGame() {
           sound.playGameOver();
           setGameState('GAMEOVER');
           setAnnouncement('DERROTA POR T.K.O.!');
+          triggerDefeat('Super Punch-Out');
         }, 1500);
       } else {
         let count = 1;
@@ -421,6 +424,7 @@ export function PunchOutGame() {
             sound.playGameOver();
             setGameState('GAMEOVER');
             setAnnouncement('NOCAUTE (K.O.)! FIM DE LUTA!');
+            triggerDefeat('Super Punch-Out');
           }
         }, 850);
       }

@@ -1,0 +1,6 @@
+{
+  "name": "Arcade Clássicos",
+  "description": "Coleção nostálgica de jogos clássicos de arcade: Snake, Tetris, Space Invaders, Pong, Breakout e Campo Minado para jogar no navegador.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

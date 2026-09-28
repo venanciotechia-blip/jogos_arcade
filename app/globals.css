@@ -1,0 +1,52 @@
+@import "tailwindcss";
+
+:root {
+  /* Rich Lilac Palette */
+  --bg-lilac-darkest: #1e0b33;
+  --bg-lilac-base: #271042;
+  --bg-lilac-card: #351658;
+  --bg-lilac-card-hover: #451d72;
+  --border-lilac: #6a349c;
+  --border-lilac-light: #8e4ec6;
+
+  /* Neon Blue Palette */
+  --neon-blue: #00f5ff;
+  --neon-blue-bright: #38e1ff;
+  --neon-blue-soft: #67e8f9;
+  --neon-blue-glow: 0 0 12px rgba(0, 245, 255, 0.55);
+}
+
+body {
+  background-color: #271042;
+  color: #00f5ff;
+  min-height: 100vh;
+}
+
+/* Neon Blue Glow utilities */
+.neon-text-glow {
+  text-shadow: 0 0 10px rgba(0, 245, 255, 0.65), 0 0 24px rgba(0, 245, 255, 0.3);
+}
+
+.neon-box-glow {
+  box-shadow: 0 0 16px rgba(0, 245, 255, 0.35);
+}
+
+.lilac-glow {
+  box-shadow: 0 0 20px rgba(142, 78, 198, 0.4);
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #1c0a30;
+}
+::-webkit-scrollbar-thumb {
+  background: #6a349c;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #00f5ff;
+}
